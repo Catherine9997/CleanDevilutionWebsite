@@ -12,7 +12,7 @@ function contains(string $needle, string $haystack): bool
  */
 function isScarry(string $haystack): bool
 {
-    return preg_match('/[^a-z0-9_-]/ui');
+    return preg_match('/[^a-z0-9_-]/ui',$haystack);
 }
 
 if (!isset($_POST['repo'], $_POST['fileName'], $_POST['fileContent'], $_POST['functionName'])) {
