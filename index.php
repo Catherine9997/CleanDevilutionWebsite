@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <style type="text/css" media="screen">
-    #editor { 
+    #editor {
         position: absolute;
         top: 0px;
         right: 100px;
@@ -21,19 +21,21 @@
 <script type="text/javascript" src="http://cemerick.github.io/jsdifflib/difflib.js"></script>
 <script>
 <?php
-exec("update.bat");
-function bigNumber() {
-    $output = rand(1,9);
-    for($i=0; $i<30; $i++) {
-        $output .= rand(0,9);
+exec('update.bat');
+function bigNumber(): int
+{
+    $output = mt_rand(1, 9);
+    for ($i = 0; $i < 30; $i++) {
+        $output .= mt_rand(0, 9);
     }
+
     return $output;
 }
 $bignum = bigNumber();
-exec("copyrepo.bat ".$bignum);
+exec('copyrepo.bat ' . $bignum);
 ?>
 $.ajaxSetup({ cache: false });
-var repoNum = "<?php echo $bignum?>";
+var repoNum = <?php echo json_encode($bignum); ?>;
 var fileChosen = false;
 var chosenFileName = "";
 function searchList(){
@@ -66,7 +68,7 @@ $("#editor").css("left",increasedWidth);
 //$('#editor').css('width', '100%').css('width', '-='+increasedWidth2);
 $('#editor').css('height', '80%')
 $('#editor').css('width', '60%')
-window.editor.resize();	
+window.editor.resize();
 
 
 $("#diffoutput").css("position","absolute");
@@ -109,7 +111,7 @@ function listClicked(e){
 
 
 function diffUsingJS(v1,v2) {
-	
+
 	"use strict";
 	var byId = function (id) { return document.getElementById(id); },
 		base = difflib.stringAsLines(v1),
@@ -140,7 +142,7 @@ function buttonClicked(){
 		$('#dataStatus').css('color', 'red');
 		return;}
 	//if(isset($_POST["repo"]) and ctype_digit($_POST["repo"]) and isset($_POST["fileName"]) and isset($_POST["fileContent"]) isset($_POST["functionName"])){
-		
+
 	var fName = $("input[name='functionName']").val();
 	$.post( "http://grzyby.ddns.net/dev/updateFile.php", { repo: repoNum, fileName: chosenFileName, fileContent: window.editor.getValue(), functionName: fName}).done(function( repoData ) {
 		$('#dataStatus').text("Done");
@@ -153,8 +155,8 @@ function buttonClicked(){
 			});
 		});
   });
-		
-	
+
+
 }
 </script>
 </head>
@@ -165,21 +167,21 @@ function buttonClicked(){
 <div id="sourceList" style="position:absolute;height:95%;width:250px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;color:#5cf442">
 <?php
 
-if ($handle = opendir('devilution_'.$bignum.'/Source/')) {
+if ($handle = opendir('devilution_' . $bignum . '/Source/')) {
     while (false !== ($entry = readdir($handle))) {
-        if ($entry != "." && $entry != "..") {
-			if (strpos($entry, '.cpp') !== false or strpos($entry, '.h') !== false) {
-				echo "<div class='sourceFile' onmousedown='listClicked(this)'>$entry</div>";
-			}
+        if ($entry !== '.' && $entry !== '..') {
+            if (mb_strpos($entry, '.cpp') !== false or mb_strpos($entry, '.h') !== false) {
+                echo "<div class='sourceFile' onmousedown='listClicked(this)'>" . htmlspecialchars($entry) . '</div>';
+            }
         }
     }
 
     closedir($handle);
 }
-#exec("/B test.bat");
-#$("input[name='searchFile']").val()
-#$(".sourceFile").css("display","none")
-#<textarea id="editFile" spellcheck="false" placeholder="I can has code? (Choose a file from the list)"></textarea>
+//exec("/B test.bat");
+//$("input[name='searchFile']").val()
+//$(".sourceFile").css("display","none")
+//<textarea id="editFile" spellcheck="false" placeholder="I can has code? (Choose a file from the list)"></textarea>
 ?>
 </div>
 
@@ -204,4 +206,3 @@ window.editor = editor;
 <div id="diffoutput" style="overflow-y: scroll;"></div>
 <input type="text" name="functionName" placeholder="function name"><br>
 <div id="compileLog" style="position:absolute;color:#5cf442"></div>
-    
