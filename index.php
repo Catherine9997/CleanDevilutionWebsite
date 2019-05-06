@@ -22,7 +22,7 @@
 <script>
 <?php
 exec('update.bat');
-function bigNumber(): int
+function bigNumber(): string
 {
     $output = mt_rand(1, 9);
     for ($i = 0; $i < 30; $i++) {

@@ -12,7 +12,7 @@ function contains(string $needle, string $haystack): bool
  */
 function isScarry(string $haystack): bool
 {
-    return preg_match('/[^a-z0-9_-]/ui',$haystack);
+    return preg_match('/[^a-z0-9_-]/ui', $haystack);
 }
 
 if (!isset($_POST['repo'], $_POST['fileName'], $_POST['fileContent'], $_POST['functionName'])) {
@@ -20,7 +20,7 @@ if (!isset($_POST['repo'], $_POST['fileName'], $_POST['fileContent'], $_POST['fu
 }
 
 if (!ctype_digit($_POST['repo'])
-    || isScarry($_POST['fileName'])
+    || !preg_match('/^[a-z0-9_-]+\.(cpp|h)$/ui', $_POST['fileName'])
     || isScarry($_POST['functionName'])
 ) {
     die('Invalid input!');
